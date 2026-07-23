@@ -19,7 +19,8 @@
   .card{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;width:100%;align-items:stretch;}
   .card>*{min-width:0;}
   .stage{position:relative;border-radius:16px;overflow:hidden;background:var(--surf);min-height:340px;}
-  .stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .35s ease;}
+  .stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .35s ease;}
+  .stage.sq img{object-fit:contain;}   /* грядка 1 (компактный куб) — целиком, без обрезки */
   .col{display:flex;flex-direction:column;min-width:0;}
   .info{min-width:0;}
   .price-val{font-family:var(--font-head);font-size:29px;font-weight:700;color:var(--green);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:.01em;}
@@ -70,7 +71,8 @@
   }
   @media(max-width:900px){
     .card{grid-template-columns:1fr;gap:18px;align-items:start;}
-    .stage{aspect-ratio:1/1;}   /* v3: квадратный кадр под квадратные рендеры — грядка целиком, без обрезки */
+    .stage{aspect-ratio:4/3;max-height:56vh;}          /* длинные грядки — заполнение кадра, как раньше */
+    .stage.sq{aspect-ratio:1/1;max-height:none;}       /* грядка 1 (куб) — квадратный кадр под квадратный рендер */
     .doc-ic{width:38px;height:38px;border-radius:10px;}   /* инструкции видимы и на мобайле; тап-таргет крупнее */
     .doc-ic svg{width:19px;height:19px;}
     .price-val{font-size:26px;}
@@ -216,6 +218,7 @@ function update(){
   const cur=front?imgs[0]:imgs[1], nxt=front?imgs[1]:imgs[0];
   nxt.onload=reportHeight;
   nxt.src=imgUrl(color,N); nxt.style.opacity=1; cur.style.opacity=0; front=!front;
+  document.querySelector('.stage').classList.toggle('sq', N===1); // грядка 1 (куб) — contain/квадрат; остальные — cover
   preloadColor(color);
   const o=order(), sp=o.sp;
   const soilL=(sp.lenInt/1000)*(sp.widInt/1000)*(CFG.soilDepth/1000)*1000;
