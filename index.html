@@ -177,9 +177,9 @@ const CFG={
   weightSection900: 15.7, // вес секции 900 мм, кг (как v2)
   weightSection485: 7,    // вес секции 485 мм, кг
   configAnchor:   '#configuration',  // якорь блока с конфигурациями ниже на странице Tilda
-  videoAnchor:    '#astra-video',    // якорь блока с ВИДЕО-инструкцией ниже на странице Tilda
-  videoEnabled:   false,             // ВРЕМЕННО: кнопка «Видео» скрыта (видео-инструкция готовится).
-                                     // Вернуть: поставить true (иконка, тултип, обработчик и videoAnchor сохранены).
+  videoAnchor:    '#video-instruction', // якорь блока ВИДЕО-инструкции на странице Tilda (внутренний скролл через мост astra:scrollTo)
+  videoEnabled:   true,              // видео-иконка показана; клик → скролл к videoAnchor на странице (не внешняя ссылка).
+                                     // Скрыть обратно: false (разметка/тултип/обработчик/якорь сохранены).
   pdfUrl:         'https://disk.yandex.ru/i/p5HK_PCmAOg3gw',  // PDF-инструкция по монтажу (откроется в новой вкладке); пусто → «скоро»
   // Корзина (см. INSTALL_TILDA.md): картинка товара берётся по URL (не base64) с GitHub Pages,
   // добавление в корзину идёт через postMessage к родительской странице Tilda.
