@@ -176,6 +176,10 @@ const CFG={
   soilDepth:      450,    // высота засыпки грунта, мм
   weightSection900: 15.7, // вес секции 900 мм, кг (как v2)
   weightSection485: 7,    // вес секции 485 мм, кг
+  // «Состав для склада» (лид Bitrix24, см. ../cart-bom/README.md): позиции 1С, к ним дописывается цвет.
+  // Длинные стороны v3 — тот же высокий модуль 900, что в v2.
+  bomName900:     'Модуль 900 мм, высокий (1 секция + 2 распорки)',
+  bomName485:     'Комплект модулей 485 мм, высокий (2 секции)',
   configAnchor:   '#configuration',  // якорь блока с конфигурациями ниже на странице Tilda
   videoAnchor:    '#video-instruction', // якорь блока ВИДЕО-инструкции на странице Tilda (внутренний скролл через мост astra:scrollTo)
   videoEnabled:   true,              // видео-иконка показана; клик → скролл к videoAnchor на странице (не внешняя ссылка).
@@ -236,6 +240,11 @@ function order(){
   if(color==='beige') breakText+='; бежевый +15%';
   return {sp,u,price,breakText};
 }
+// Состав для склада: позиции 1С на ОДНУ грядку (qty — шт, unit — цена за шт). Покупателю не показывается.
+function bom(){const o=order(),c=colorName().toLowerCase(),b=[];
+  if(o.sp.n900) b.push({name:CFG.bomName900+', '+c, qty:o.sp.n900, unit:o.u.u900});
+  if(o.sp.n485) b.push({name:CFG.bomName485+', '+c, qty:o.sp.n485, unit:o.u.u485});
+  return b;}
 function cartImgUrl(){return imgUrl(color,N);}
 function update(){
   const cur=front?imgs[0]:imgs[1], nxt=front?imgs[1]:imgs[0];
@@ -268,7 +277,8 @@ function cartProduct(){
     uid:'astra3-'+color+'-'+N, id:'astra3-'+color+'-'+N, name:name,
     price:o.price, quantity:1, img:cartImgUrl(), url:CFG.productUrl||location.href,
     option:[{option:'Цвет',variant:colorName()},{option:'Размер',variant:size},{option:'Состав',variant:o.breakText}],
-    descr:o.breakText
+    descr:o.breakText,
+    astra_bom:bom()   // → скрипт в футере Tilda → скрытое поле корзины → лид Bitrix24 «Состав для склада»
   };
 }
 function addToCart(){
